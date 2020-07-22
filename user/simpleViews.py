@@ -3,9 +3,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
+from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
+
 
 from user import simpleSirealizer
 from user import models
+from user import permission
 
 
 class HelloApiView(APIView):
@@ -84,3 +88,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = simpleSirealizer.UserProfileSerilizer
     queryset = get_user_model().objects.all()
     #queryset = models.userprofile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permission.UpdateOwnProfile,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('username','email',)
