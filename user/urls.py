@@ -8,6 +8,7 @@ app_name ='user'
 
 router =DefaultRouter()
 router.register('hello-viewsets',simpleViews.HelloViewSts,basename='hello-viewsets')
+router.register('profile-viewsets',simpleViews.UserProfileViewSet,basename='profile-viewsets')
 
 urlpatterns = [
      path('create/', views.CreateUserView.as_view(),name='create'),

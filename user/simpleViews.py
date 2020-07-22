@@ -2,8 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from django.contrib.auth import get_user_model
 
 from user import simpleSirealizer
+from user import models
 
 
 class HelloApiView(APIView):
@@ -76,3 +78,9 @@ class HelloViewSts(viewsets.ViewSet):
 
     def destroy(self,request,pk=None):
           return Response({'http-method':'DELETE'})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = simpleSirealizer.UserProfileSerilizer
+    queryset = get_user_model().objects.all()
+    #queryset = models.userprofile.objects.all()
