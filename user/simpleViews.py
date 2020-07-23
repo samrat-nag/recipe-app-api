@@ -5,7 +5,12 @@ from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
-
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
+#from rest_framework.permissions import IsAuthenticatedOrReadOnly
+""" without Authentication view only """
+from rest_framework.permissions import IsAuthenticated
+""" No authentication no View """
 
 from user import simpleSirealizer
 from user import models
@@ -92,3 +97,20 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     permission_classes = (permission.UpdateOwnProfile,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('username','email',)
+
+
+class UserLoginApiView(ObtainAuthToken):
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+
+class UserProfileFeedVewSet(viewsets.ModelViewSet):
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = simpleSirealizer.ProfileFeedItemSerializer
+    queryset = models.UserProfileFeedItem.objects.all()
+    permission_classes = {
+               permission.UpdateOwnStatus,
+               IsAuthenticated
+    }
+
+    def perform_create(self,serializer):
+        serializer.save(username=self.request.user)

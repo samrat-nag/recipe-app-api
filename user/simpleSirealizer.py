@@ -23,7 +23,15 @@ class UserProfileSerilizer(serializers.ModelSerializer):
              user = get_user_model().objects.create_user(
              #user=    models.userprofile.objects.create_user(
                 email = validated_data['email'],
-                name = validated_data['name'],
+                username = validated_data['name'],
                 password = validated_data['password']
              )
              return user
+
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+
+      class Meta:
+          model = models.UserProfileFeedItem
+          fields =('id','username','ACC_class','status_text','created_on')
+          extra_kwargs = {'username': {'read_only':True}}
